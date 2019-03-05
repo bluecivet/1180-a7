@@ -18,42 +18,54 @@ public class Window extends JFrame
 
   public Window()
   {
-  	label = new JLabel("enter the expression of the calculation");
-    top = new JPanel();
-    input = new JTextField();
-    input.setColumns(10);
-    result = new JButton("result");
-    top.add(label);
-    top.add(input);
-    top.add(result);
-    this.add(top,BorderLayout.NORTH);
-    
-    center1 = new JPanel();
-    center2 = new JPanel();
-    warning = new JLabel("hi");
-    output = new JTextArea();
-    System.out.println(getWidth());
-    output.setPreferredSize(new Dimension(300,300));
-    center1.add(output);
-    center2.add(warning);
-    this.add(center2);
-    this.add(center1, BorderLayout.SOUTH);
-
-    this.setFont();
+    setVariable();
+    this.setStyle();
   }
 
 
 //-----------------------------------------------------------------------------------
   
-  private void setFont()
+  private void setStyle()
   {
   	input.setFont(DEFAULT_FONT);
   	result.setFont(DEFAULT_FONT);
-  	//output.setFont(DEFAULT_FONT);
+  	output.setFont(DEFAULT_FONT);
   	label.setFont(DEFAULT_FONT);
   	warning.setFont(DEFAULT_FONT);
+  	warning.setForeground(Color.blue);
+  	warning.setBackground(Color.magenta);
+  	warning.setOpaque(true);
 
   }
+
+
+  ///////////////////////////////////////////////////////////////////////////////////
+
+    private void setVariable()
+    {
+        label = new JLabel("enter the expression of the calculation");
+        top = new JPanel();
+        input = new JTextField();
+        input.setColumns(10);
+        result = new JButton("result");
+        top.add(label);
+        top.add(input);
+        top.add(result);
+        this.add(top,BorderLayout.NORTH);
+
+        center1 = new JPanel();
+        center2 = new JPanel();
+        warning = new JLabel("");
+        output = new JTextArea();
+        JScrollPane js = new JScrollPane(output);
+        js.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        System.out.println(getWidth());
+        js.setPreferredSize(new Dimension(300,300));
+        center1.add(js);
+        center2.add(warning);
+        this.add(center2);
+        this.add(center1, BorderLayout.SOUTH);
+    }
 //-----------------------------------------------------------------------------------
   
   public void showWindow()
