@@ -4,5 +4,6 @@ public class A7
 	{
 		Window win = new Window();
 		win.showWindow();
+		System.out.println(win.getWidth());
 	}
 }
