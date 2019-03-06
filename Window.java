@@ -101,7 +101,7 @@ public class Window extends JFrame
     {
 
     	/**
-    	 * the method will be used if the user press the button
+    	 * the method will be used if the user press the button or press enter
     	 * it will show the result for the expression in the text field
     	 * @param e the ActionEvent
     	 */
@@ -112,22 +112,7 @@ public class Window extends JFrame
             getResult();
         }
 
-        /**
-         * the method will be used if the user press enter
-         * it will show the result for the expression in the text field
-         * @param e the KeyEvent
-         */
-        
-        @Override
-        public void keyPressed(KeyEvent e)
-        {
-        	switch(e.getKeyChar())
-        	{
-        		case '\n' : getResult(); break; // detect the key of the user enter
-
-        		default : break;
-        	}
-        }
+    
     }
 
 
@@ -149,7 +134,6 @@ public class Window extends JFrame
 		int answer = 0;
 		int firstNum, secondNum;
         Scanner scan = new Scanner(input);
-        boolean displayInTextArea = false;  
 
         warning.setText("");  // clear warning message
         
@@ -159,9 +143,14 @@ public class Window extends JFrame
             operator = scan.next();
             secondNum = scan.nextInt();
 
-            if(scan.hasNext())
+            try
             {
-                throw new IllegalStateException();
+                scan.next();
+                throw new InvalidExpressionException();
+            }
+            catch(NoSuchElementException e)
+            {
+                // do nothing;
             }
 
             switch(operator)
@@ -179,38 +168,41 @@ public class Window extends JFrame
                 default: throw new IllegalArgumentException();
             }
 
-            message = firstNum + " " + operator + " " + secondNum + " = " + answer;
-            displayInTextArea = true;
+            message = firstNum + " " + operator + " " + secondNum + " = " + answer + "\n";
         } // end try
         catch(InputMismatchException e)
         {
+            message = "";
             warningMessage = "please input integer!! other characters will not accept except operator";
         }
         catch(NoSuchElementException e)
         {
+            message = "";
             warningMessage = "you are missing something!!!";
         }
         catch(IllegalArgumentException e)
         {
+            message = "";
             warningMessage = "the operator is not correct";
         }
-        catch(IllegalStateException e)
+        catch(InvalidExpressionException e)
         {
+            message = "";
             warningMessage = "you input too much!!";
         }
         catch(ArithmeticException e)
         {
+            message = "";
             warningMessage = e.getMessage();
         }
         catch(Exception e)    // in case of other error format that user enter
         {
+            message = "";
             warningMessage = e.toString();
         }
 
-        if(displayInTextArea)
-        {
-            output.append(message + "\n");
-        }
+        //display result
+        output.append(message);
         warning.setText(warningMessage);
     } // end the method
 
@@ -302,7 +294,8 @@ public class Window extends JFrame
     	ResizeListener listener = new ResizeListener();  // when resizing the window
     	this.addComponentListener(listener);
     	this.addWindowStateListener(listener);
-    	input.addKeyListener(pressed);
+        //input.addKeyListener(pressed);
+        input.addActionListener(pressed);
     	result.addActionListener(pressed);
     }
 
